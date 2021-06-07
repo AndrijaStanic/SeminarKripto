@@ -1,0 +1,87 @@
+
+#from bitcoinrpc import BitcoinRPC
+from bitcoinrpc.authproxy import AuthServiceProxy, JSONRPCException
+
+def main():
+    
+    node = "blockchain.oss.unist.hr"
+    test_node = 'test.feeeesb.hr'
+    port = "8332"
+    user = "student"
+    password = "2B4DB3SmsM2B4DB3SmsM89QjgYFp89QjgYFp"
+    link = "http://" + user + ":" + password + "@" + node + ":" + port
+    rpc_connection = AuthServiceProxy(link)
+    
+    block = rpc_connection.getbestblockhash()
+    #json s detaljima o bloku kojeg smo proslijedili
+    
+    
+    blok_detalji = rpc_connection.getblock(block, 1)
+    print("Vrijeme bloka od 1970: ", blok_detalji['time'])
+    print("Tezina definirana u BIP 141: ", blok_detalji['weight'])
+    print("Visina bloka: ", blok_detalji['height'])
+    print("Hash bloka: ", blok_detalji['hash'])
+    print("Hash prijašnjeg bloka: ", blok_detalji['previousblockhash'])
+    print("Nonce bloka: ", blok_detalji['nonce'])    
+    print("Verzija bloka: ", blok_detalji['version'])
+    print("Merkle root: ", blok_detalji['merkleroot'])
+    print("Broj potvrda: ", blok_detalji['confirmations'])
+    print("Velicina bloka izrazena u bytovima: ", blok_detalji['size'])
+    print("Broj transakcija u bloku: ", blok_detalji['nTx'])
+    
+    
+    
+    
+    print("\n")
+    
+    
+    blok_transakcije_info = rpc_connection.getblockstats(block)
+    print("Nagrada za rudarenje bloka :", blok_transakcije_info['subsidy']*0.00000001,"BTC")
+    print("Max fee je :", blok_transakcije_info['maxfee'],"BTC")    
+    print("Min fee je :", blok_transakcije_info['minfee'],"BTC") 
+    print("\n")
+    
+    blockchain = rpc_connection.getblockchaininfo()
+    print("Naziv: ",blockchain['chain'])
+    print("Broj blokova: ",blockchain['blocks'])
+    print("Težina: ",blockchain['difficulty'])
+    print("Hash najboljeg bloka: ",blockchain['bestblockhash'])
+    print("Verifikacija: ",blockchain['verificationprogress'])
+    print("Jeli cvor inicijlani: ",blockchain['initialblockdownload'])
+    print("Velicina izraazena u bytovima: ",blockchain['size_on_disk'])
+    
+    print("\n")
+    
+    mempool = rpc_connection.getmempoolinfo()
+    print("Broj transkacija u mempoolu: ", mempool['size'])
+    print("Korištena memorija: ", mempool['usage'], "bytes")
+    print("Max mempool memorija: ", mempool['maxmempool'], "MB")
+    print("Trenutna najmanji relay fee za transakciju: ", mempool['minrelaytxfee'],"BTC/kb")
+    
+    print("\n")
+    
+    rpc_connection.addnode(node, 'add')
+    
+    
+    cvor_detalji = rpc_connection.getaddednodeinfo(node)
+    print("Dodano je: ", cvor_detalji[0]['addednode'])
+    print("Jesmo li spojeni?", cvor_detalji[0]['connected'])
+    print("Broj spajanja s drugim čvorovima: ", rpc_connection.getconnectioncount())
+    
+    
+    print("Server je star : ", rpc_connection.uptime(), "sekunda.")
+    
+    rpc_connection.addnode(node, 'remove')
+    #Brisanje
+    #rpc_connection.disconnectnode(node)
+    print("\n")
+    print('Unesite zeljenu visinu za pretragu hasha.')
+    x = int(input())
+    
+    #####PRETREAGA PO HASHU#### UNOS #####
+    
+    pretraga = rpc_connection.getblockhash(x)
+    print("Hash za trazenu visinu je: ", pretraga)
+    
+    
+main()
