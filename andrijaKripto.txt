@@ -13,7 +13,6 @@ def main():
     rpc_connection = AuthServiceProxy(link)
     
     block = rpc_connection.getbestblockhash()
-    #json s detaljima o bloku kojeg smo proslijedili
     
     
     blok_detalji = rpc_connection.getblock(block, 1)
