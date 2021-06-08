@@ -7,8 +7,8 @@ def main():
     node = "blockchain.oss.unist.hr"
     test_node = 'test.feeeesb.hr'
     port = "8332"
-    user = "student"
-    password = "2B4DB3SmsM2B4DB3SmsM89QjgYFp89QjgYFp"
+    user = "****"
+    password = "*****"
     link = "http://" + user + ":" + password + "@" + node + ":" + port
     rpc_connection = AuthServiceProxy(link)
     
